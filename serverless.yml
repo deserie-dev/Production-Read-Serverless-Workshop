@@ -8,6 +8,11 @@ provider:
   name: aws
   runtime: nodejs12.x
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action: dynamodb:scan
+      Resource: !GetAtt RestaurantsTable.Arn
+
 functions:
   get-index:
     handler: functions/get-index.handler
@@ -15,7 +20,9 @@ functions:
       - http:
           path: /
           method: get
-
+    environment:
+      restaurants_api: https://#{ApiGatewayRestApi}.execute-api.#{AWS::Region}.amazonaws.com/${self:provider.stage}/restaurants
+          
   get-restaurants:
     handler: functions/get-restaurants.handler
     events:
@@ -43,4 +50,5 @@ resources:
       Value: !Ref RestaurantsTable  
 
 plugins:
-  - serverless-export-env      
+  - serverless-export-env   
+  - serverless-pseudo-parameters   

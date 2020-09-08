@@ -36,4 +36,11 @@ resources:
             AttributeType: S
         KeySchema:
           - AttributeName: name
-            KeyType: HASH      
+            KeyType: HASH
+
+  Outputs:
+    RestaurantsTableName:
+      Value: !Ref RestaurantsTable  
+
+plugins:
+  - serverless-export-env      
